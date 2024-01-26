@@ -93,6 +93,12 @@ a {
   text-decoration: none;
 }
 
+span {
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  text-align: left;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
