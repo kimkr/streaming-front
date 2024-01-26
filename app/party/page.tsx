@@ -43,11 +43,11 @@ export default function PartyHome() {
                         "mime": "PNG"
                     },
                     "artist": {
-                        "id": 56,
-                        "name": "ATEEZ",
+                        "id": 123,
+                        "name": "BTS",
                         "image": {
-                            "id": 2345,
-                            "filename": "ATEEZ_main.png",
+                            "id": 123,
+                            "filename": "/images/123.svg",
                             "thumb_url": "https://storeage.makestar.com/ATEEZ_main.thumb.png",
                             "mime": "PNG"
                         }
@@ -56,6 +56,10 @@ export default function PartyHome() {
             },
             status: APPLICATION_STATE.IN_REVIEW
         })
+    }, []);
+
+    const showCancelModal = useCallback(() => {
+        
     }, []);
 
     return (
@@ -68,7 +72,7 @@ export default function PartyHome() {
             <div className={styles.partylist}>
                 {
                     application == null ? (
-                        <HostPartyItem onClick={startHostingParty} />
+                        <HostPartyItem onClickApply={startHostingParty} />
                     ) : (
                         <>
                             <div className={styles.itemtitle}>
@@ -76,6 +80,7 @@ export default function PartyHome() {
                             </div>
                             <PartyApplicationItem
                                 application={{ ...application, status: applicationStatus }}
+                                onClickMore={showCancelModal}
                             />
                         </>
                     )

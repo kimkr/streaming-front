@@ -7,12 +7,3 @@ export const APPLICATION_STATE = {
     APPROVAL: 4,
     REJECTED: 5
 }
-
-export const APPLICATION_STATUS_DESC = {
-    0: "Pending",
-    1: "Canceled",
-    2: "In review",
-    3: "In prcessing",
-    4: "Approved",
-    5: "Rejected"
-}

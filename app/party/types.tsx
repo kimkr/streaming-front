@@ -10,7 +10,7 @@ export type PartyApplicationType = {
     status: number;
     before_level?: number;
     after_level?: number;
-    member?: {
+    member: {
         id: number;
         level: number;
         profile_image: ImageType;

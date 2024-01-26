@@ -83,3 +83,58 @@
   line-height: 24px;
   color: #F5F5F5;
 }
+
+.partylist .application {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px 24px 16px 24px;
+  gap: 16px;
+}
+.partylist .application .image {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+}
+.partylist .application .textgroup {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+.partylist .application .textgroup .name {
+  font-size: 16px;
+  line-height: 24px;
+  height: 24px;
+  color: #F7F8F9;
+}
+.partylist .application .textgroup .date {
+  font-size: 14px;
+  line-height: 20px;
+  height: 20px;
+  color: #848B9C;
+}
+.partylist .application .status {
+  font-size: 14px;
+  line-height: 20px;
+  height: 20px;
+  color: #CCD0D7;
+}
+.partylist .application .more {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+
+}
+.partylist .application .more .dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: #CCD0D7;
+}
