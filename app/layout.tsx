@@ -1,8 +1,26 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const pretendard = localFont({
+  src: [
+    {
+      path: './fonts/Pretendard-Medium.woff',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Pretendard-Regular.woff',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Pretendard-Light.woff',
+      weight: '300',
+      style: 'normal',
+    },
+  ]
+})
 
 export const metadata: Metadata = {
 };
@@ -14,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={pretendard.className}>{children}</body>
     </html>
   );
 }

@@ -93,8 +93,36 @@ a {
   text-decoration: none;
 }
 
+span {
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  text-align: left;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
+}
+.react-modal-sheet-backdrop {
+  background-color: transparent;
+}
+.react-modal-sheet-container {
+  padding: 12px 0px 0px 0px !important;
+  border-radius: 24px 24px 0px 0px !important;
+  background-color: #1F1F1F !important;
+  max-width: 700px !important;
+  margin: 0 auto !important;
+}
+.react-modal-sheet-header {
+  height: 0px !important;
+}
+.react-modal-sheet-drag-indicator {
+  display: none !important;
+}
+.react-modal-sheet-content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  padding: 16px 24px 0px 24px !important;
 }

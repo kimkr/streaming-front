@@ -1,0 +1,201 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 100vh;
+}
+
+@media (min-width: 701px) {
+  .main {
+    width: 700px;
+    margin: auto;
+  }
+}
+
+.party {
+  width: 100%;
+  height: 48px;
+  padding: 8px 12px 8px 24px;
+  gap: 12px;
+}
+
+.party .title {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.partylist {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-top: 12px;
+  flex-grow: 1;
+}
+
+.partylist .item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px 16px 24px;
+  gap: 16px;
+  background: #1F232A;
+}
+
+.partylist .item .textgroup {
+  display: flex;
+  flex-direction: column; 
+  gap: 4px;
+}
+.partylist .item .textgroup .label {
+  line-height: 24px;
+  font-size: 16px;
+  color: #F7F8F9;
+}
+.partylist .item .textgroup .desc {
+  line-height: 20px;
+  font-size: 14px;
+  color: #A6AEBC;
+}
+.partylist .item .apply {
+  width: 107px;
+  height: 48px;
+  border: 0;
+  border-radius: 24px;
+  gap: 8px;
+  background: #8840FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.partylist .item .apply span {
+  line-height: 24px;
+  font-size: 16px;
+  text-align: center;
+  color: #F7F8F9;
+}
+.partylist .itemtitle {
+  height: 60px;
+  padding: 24px 24px 12px 24px;
+  gap: 4px;
+  font-size: 20px;
+  line-height: 24px;
+  color: #F5F5F5;
+}
+
+.partylist .application {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px 24px 16px 24px;
+  gap: 16px;
+}
+.partylist .application .image {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+}
+.partylist .application .textgroup {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+.partylist .application .textgroup .name {
+  font-size: 16px;
+  line-height: 24px;
+  height: 24px;
+  color: #F7F8F9;
+}
+.partylist .application .textgroup .date {
+  font-size: 14px;
+  line-height: 20px;
+  height: 20px;
+  color: #848B9C;
+}
+.partylist .application .status {
+  font-size: 14px;
+  line-height: 20px;
+  height: 20px;
+  color: #CCD0D7;
+}
+.partylist .application .more {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+
+}
+.partylist .application .more .dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: #CCD0D7;
+}
+.partylist .dim {
+  background: #00000090;
+  width: 100%;
+  height: calc(100% - 48px);
+  position: absolute;
+  top: 48px;
+}
+button.quit {
+  width: 100%;
+  height: 56px;
+  padding: 14px 24px 14px 24px;
+  border-radius: 12px;
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF1A;
+  border: 0;
+}
+button.quit span {
+  font-size: 18px;
+  line-height: 28px;
+  color: #F7F8F9;
+}
+button.close {
+  width: 100%;
+  height: 56px;
+  padding: 14px 24px 14px 24px;
+  border-radius: 12px;
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: 0;
+}
+button.close span {
+  font-size: 18px;
+  line-height: 28px;
+  color: #848B9C;
+}
+.successToast {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 193px;
+  height: 36px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 50px;
+  background-color: #F5F5F5;
+  margin-bottom: 102px;
+}
+.successToast .message {
+  color: #000000;
+  font-size: 13px;
+  line-height: 15.5px;
+  height: 16px;
+}
