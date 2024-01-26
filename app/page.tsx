@@ -1,20 +1,5 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import { redirect } from 'next/navigation'
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          HELLO 
-        </p>
-        <div>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        WORLD 
-      </div>
-    </main>
-  );
+  redirect('/party');
 }

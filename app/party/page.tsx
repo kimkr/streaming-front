@@ -3,14 +3,18 @@
 import React, { useState, useCallback } from 'react';
 import Image from "next/image";
 import styles from "./page.module.css";
+import toast from 'react-hot-toast';
 import { APPLICATION_STATE } from "../constants";
 import HostPartyItem from './_components/hostPartyItem';
 import PartyApplicationItem from './_components/partyApplicationItem';
+import CancelModal from './_components/cancelModal';
+import SuccessToast from './_components/successToast';
 import { PartyApplicationType, ImageType } from './types';
 
 export default function PartyHome() {
     const [applicationStatus, setApplicationStatus] = useState(APPLICATION_STATE.NA);
     const [application, setApplication] = useState<PartyApplicationType | null>(null);
+    const [cancelModalOpen, setCancelModalOpen] = useState(false);
 
     const startHostingParty = useCallback(() => {
         setApplicationStatus(APPLICATION_STATE.IN_REVIEW);
@@ -58,9 +62,16 @@ export default function PartyHome() {
         })
     }, []);
 
-    const showCancelModal = useCallback(() => {
-        
+    const quitHostingParty = useCallback(() => {
+        setCancelModalOpen(false);
+        onApplicationApproved();
     }, []);
+
+    const showCancelModal = useCallback(() => {
+        setCancelModalOpen(true);
+    }, []);
+
+    const onApplicationApproved = () => toast('Application complete!')
 
     return (
         <main className={styles.main}>
@@ -85,7 +96,15 @@ export default function PartyHome() {
                         </>
                     )
                 }
+                {
+                    cancelModalOpen && (<div className={styles.dim} />)
+                }
             </div>
+            <CancelModal
+                isOpen={cancelModalOpen}
+                onClickQuit={() => quitHostingParty()}
+                onClose={() => setCancelModalOpen(false)} />
+            <SuccessToast />
         </main>
     );
 }
