@@ -24,3 +24,7 @@ export const applyHost = async (args: ApplyHostArg) => {
 export const listHostApplyStatus = async (page: number, size: number) => {
     return axios.get(`/streaming/list_host_apply_status/${page}/${size}`);
 }
+
+export const cancelHostApply = async (requestId: number) => {
+    return axios.patch('/streaming/cancel_host_apply/', { request_id: requestId });
+}

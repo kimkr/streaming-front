@@ -12,7 +12,8 @@ import SuccessToast from './_components/successToast';
 import { PartyApplicationType, ImageType } from './types';
 import {
     applyHost as applyHostApi,
-    listHostApplyStatus as listHostApplyStatusApi
+    listHostApplyStatus as listHostApplyStatusApi,
+    cancelHostApply as cancelHostApplyApi,
 } from '../lib/api';
 
 export default function PartyHome() {
@@ -57,10 +58,21 @@ export default function PartyHome() {
         }
     }, []);
 
-    const quitHostingParty = useCallback(() => {
-        setCancelModalOpen(false);
-        onApplicationApproved();
-    }, []);
+    const quitHostingParty = useCallback(async () => {
+        const requestId = application?.id;
+        if (requestId !== undefined) {
+            try {
+                const res = await cancelHostApplyApi(requestId);
+                setApplication(null);
+                setApplicationStatus(APPLICATION_STATE.NA);
+                toast(res.data.message);
+            } catch (e) {
+                toast("A problem is occurred. Please try again later.");
+            } finally {
+                setCancelModalOpen(false);
+            }
+        }
+    }, [application]);
 
     const showCancelModal = useCallback(() => {
         setCancelModalOpen(true);
@@ -104,7 +116,7 @@ export default function PartyHome() {
             </div>
             <CancelModal
                 isOpen={cancelModalOpen}
-                onClickQuit={() => quitHostingParty()}
+                onClickQuit={quitHostingParty}
                 onClose={() => setCancelModalOpen(false)} />
             <SuccessToast />
         </main>
