@@ -5,6 +5,7 @@ import { APPLICATION_STATE } from '@/app/constants';
 
 type PartyApplicationItemProps = {
     application: PartyApplicationType,
+    applicationStatus: number,
     onClickMore: () => void
 }
 
@@ -32,7 +33,7 @@ function renderStatusText(status: number) {
     }
 }
 
-export default function PartyApplicationItem({ application, onClickMore }: PartyApplicationItemProps): ReactElement {
+export default function PartyApplicationItem({ application, applicationStatus, onClickMore }: PartyApplicationItemProps): ReactElement {
     return (
         <div className={styles.application}>
             <img className={styles.image}
@@ -42,7 +43,7 @@ export default function PartyApplicationItem({ application, onClickMore }: Party
                 <span className={styles.date}>{formatDate(new Date())}</span>
             </div>
             <span className={styles.status}>
-                {renderStatusText(application.status)}
+                {renderStatusText(applicationStatus)}
             </span>
             <button className={styles.more} onClick={onClickMore}>
                 <span className={styles.dot} />
