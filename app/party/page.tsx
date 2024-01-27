@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Image from "next/image";
 import styles from "./page.module.css";
 import toast from 'react-hot-toast';
@@ -10,12 +10,36 @@ import PartyApplicationItem from './_components/partyApplicationItem';
 import CancelModal from './_components/cancelModal';
 import SuccessToast from './_components/successToast';
 import { PartyApplicationType, ImageType } from './types';
-import { applyHost as applyHostApi } from '../lib/api';
+import {
+    applyHost as applyHostApi,
+    listHostApplyStatus as listHostApplyStatusApi
+} from '../lib/api';
 
 export default function PartyHome() {
     const [applicationStatus, setApplicationStatus] = useState(APPLICATION_STATE.NA);
     const [application, setApplication] = useState<PartyApplicationType | null>(null);
     const [cancelModalOpen, setCancelModalOpen] = useState(false);
+
+    useEffect(() => {
+        const loadUserApplyStatus = async () => {
+            // Using session(currently none), call 'listHostApplyStatus'
+            try {
+                const res = await listHostApplyStatusApi(1, 10);
+                const items = res?.data?.external_data?.request_list || [];
+                const toShowApplication = items
+                    .filter(({ status }: PartyApplicationType) => [
+                        APPLICATION_STATE.IN_REVIEW, APPLICATION_STATE.QUEUED
+                    ].includes(status))?.[0];
+                if (toShowApplication) {
+                    setApplication(toShowApplication);
+                    setApplicationStatus(toShowApplication.status);
+                }
+            } catch (e) {
+                toast("A problem is occurred. Please try again later")
+            }
+        }
+        loadUserApplyStatus();
+    }, []);
 
     const startHostingParty = useCallback(async () => {
         setApplicationStatus(APPLICATION_STATE.PENDING);

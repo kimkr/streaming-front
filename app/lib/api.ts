@@ -21,3 +21,6 @@ export const applyHost = async (args: ApplyHostArg) => {
     return axios.post('/streaming/apply_host/', args);
 };
 
+export const listHostApplyStatus = async (page: number, size: number) => {
+    return axios.get(`/streaming/list_host_apply_status/${page}/${size}`);
+}
