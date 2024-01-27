@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useCallback, useEffect } from 'react';
-import Image from "next/image";
 import styles from "./page.module.css";
 import toast from 'react-hot-toast';
 import { APPLICATION_STATE } from "../constants";
@@ -15,6 +14,7 @@ import {
     listHostApplyStatus as listHostApplyStatusApi,
     cancelHostApply as cancelHostApplyApi,
 } from '../lib/api';
+import { socket } from '../lib/socket';
 
 export default function PartyHome() {
     const [applicationStatus, setApplicationStatus] = useState(APPLICATION_STATE.NA);
@@ -23,7 +23,7 @@ export default function PartyHome() {
 
     useEffect(() => {
         const loadUserApplyStatus = async () => {
-            // Using session(currently none), call 'listHostApplyStatus'
+            // TODO: Using session(currently none), call 'listHostApplyStatus'
             try {
                 const res = await listHostApplyStatusApi(1, 10);
                 const items = res?.data?.external_data?.request_list || [];
@@ -42,6 +42,36 @@ export default function PartyHome() {
         loadUserApplyStatus();
     }, []);
 
+    useEffect(() => {
+        let message;
+        switch (applicationStatus) {
+            case APPLICATION_STATE.APPROVAL:
+                message = 'Application complete!';
+                socket.disconnect();
+                break;
+            case APPLICATION_STATE.REJECTED:
+                message = 'Application rejected!';
+                socket.disconnect();
+                break;
+            case APPLICATION_STATE.CANCELED:
+                socket.disconnect();
+                break;
+        }
+        if (message) {
+            toast(message);
+        }
+    }, [applicationStatus]);
+
+    useEffect(() => {
+        const updateApplyStatus = (data: any) => {
+            const { status } = data;
+            if (status !== undefined) {
+                setApplicationStatus(status);
+            }
+        }
+        socket.on("getNotification", updateApplyStatus);
+    }, []);
+
     const startHostingParty = useCallback(async () => {
         setApplicationStatus(APPLICATION_STATE.PENDING);
         try {
@@ -53,6 +83,8 @@ export default function PartyHome() {
             });
             setApplication(res.data.external_data);
             setApplicationStatus(res.data.status);
+            socket.auth = { requestId: res.data.external_data.id };
+            socket.connect();
         } catch (e) {
             toast("A problem is occurred. Please try again later.");
         }
@@ -63,6 +95,7 @@ export default function PartyHome() {
         if (requestId !== undefined) {
             try {
                 const res = await cancelHostApplyApi(requestId);
+                socket.disconnect();
                 setApplication(null);
                 setApplicationStatus(APPLICATION_STATE.NA);
                 toast(res.data.message);
@@ -77,8 +110,6 @@ export default function PartyHome() {
     const showCancelModal = useCallback(() => {
         setCancelModalOpen(true);
     }, []);
-
-    const onApplicationApproved = () => toast('Application complete!')
 
     return (
         <main className={styles.main}>
@@ -102,7 +133,8 @@ export default function PartyHome() {
                             {
                                 application !== null && (
                                     <PartyApplicationItem
-                                        application={{ ...application, status: applicationStatus }}
+                                        application={application}
+                                        applicationStatus={applicationStatus}
                                         onClickMore={showCancelModal}
                                     />
                                 )
