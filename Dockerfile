@@ -8,6 +8,12 @@ USER node
 
 RUN yarn install --frozen-lockfile
 
+ARG API_URL_ARG
+ENV NEXT_PUBLIC_API_URL=${API_URL_ARG}
+
+RUN echo "NEXT_PUBLIC_API_URL:"
+RUN echo ${NEXT_PUBLIC_API_URL}
+
 RUN yarn build
 
 EXPOSE 3000
