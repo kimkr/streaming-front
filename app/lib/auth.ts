@@ -13,3 +13,7 @@ export const anonymousSignIn = async () => {
         console.error(e);
     }
 }
+
+export const getUserId = async () => {
+    return window.localStorage.getItem("userId");
+}
