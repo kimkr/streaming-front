@@ -14,7 +14,7 @@ import {
     listHostApplyStatus as listHostApplyStatusApi,
     cancelHostApply as cancelHostApplyApi,
 } from '../lib/api';
-import { anonymousSignIn } from '../lib/auth';
+import { anonymousSignIn, getUserId } from '../lib/auth';
 import { socket } from '../lib/socket';
 
 export default function PartyHome() {
@@ -25,26 +25,22 @@ export default function PartyHome() {
 
     useEffect(() => {
         const loadUserApplyStatus = async () => {
-            try {
-                const res = await listHostApplyStatusApi(1, 10);
-                const items = res?.data?.external_data?.request_list || [];
-                const toShowApplication = items
-                    .filter(({ status }: PartyApplicationType) => [
-                        APPLICATION_STATE.IN_REVIEW, APPLICATION_STATE.QUEUED,
-                        APPLICATION_STATE.APPROVAL
-                    ].includes(status))?.[0];
-                if (toShowApplication) {
-                    setApplication(toShowApplication);
-                    setApplicationStatus(toShowApplication.status);
-                }
-                setLoading(false);
-
-            } catch (e) {
-                toast("A problem is occurred. Please try again later")
+            const res = await listHostApplyStatusApi(1, 10);
+            const items = res?.data?.external_data?.request_list || [];
+            const toShowApplication = items
+                .filter(({ status }: PartyApplicationType) => [
+                    APPLICATION_STATE.IN_REVIEW, APPLICATION_STATE.QUEUED,
+                    APPLICATION_STATE.APPROVAL, APPLICATION_STATE.REJECTED
+                ].includes(status))?.[0];
+            if (toShowApplication) {
+                setApplication(toShowApplication);
+                setApplicationStatus(toShowApplication.status);
             }
+            setLoading(false);
         }
 
-        const connectSocket = async (userId?: string) => {
+        const connectSocket = async () => {
+            const userId = getUserId();
             socket.auth = { userId };
             socket.connect();
             socket.on("getNotification", (data: any) => {
@@ -56,8 +52,11 @@ export default function PartyHome() {
             return;
         }
 
-        anonymousSignIn().then((userId) =>
-            Promise.all([loadUserApplyStatus(), connectSocket(userId)]));
+        Promise.all([loadUserApplyStatus(), connectSocket()])
+            .catch((e) => {
+                console.error(e);
+                toast("A problem is occurred. Please try again later");
+            });
 
         return () => { socket.disconnect() };
     }, []);
