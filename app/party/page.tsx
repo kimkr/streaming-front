@@ -39,8 +39,7 @@ export default function PartyHome() {
             setLoading(false);
         }
 
-        const connectSocket = async () => {
-            const userId = getUserId();
+        const connectSocket = async (userId: any) => {
             socket.auth = { userId };
             socket.connect();
             socket.on("getNotification", (data: any) => {
@@ -52,11 +51,12 @@ export default function PartyHome() {
             return;
         }
 
-        Promise.all([loadUserApplyStatus(), connectSocket()])
-            .catch((e) => {
-                console.error(e);
-                toast("A problem is occurred. Please try again later");
-            });
+        anonymousSignIn()
+            .then((userId) => Promise.all([loadUserApplyStatus(), connectSocket(userId)])
+                .catch((e) => {
+                    console.error(e);
+                    toast("A problem is occurred. Please try again later");
+                }));
 
         return () => { socket.disconnect() };
     }, []);
