@@ -17,14 +17,23 @@ type ApplyHostArg = {
     email: string;
 }
 
+const axiosConfig = () => {
+    const token = window.localStorage.getItem("userId");
+    return { headers: { "Authorization": `Bearer ${token}` } };
+}
+
+export const anonymousSignIn = async (userId?: string) => {
+    return axios.post('/anonymous/sign_in/', { userId });
+}
+
 export const applyHost = async (args: ApplyHostArg) => {
-    return axios.post('/streaming/apply_host/', args);
+    return axios.post('/streaming/apply_host/', args, axiosConfig());
 };
 
 export const listHostApplyStatus = async (page: number, size: number) => {
-    return axios.get(`/streaming/list_host_apply_status/${page}/${size}`);
+    return axios.get(`/streaming/list_host_apply_status/${page}/${size}`, axiosConfig());
 }
 
 export const cancelHostApply = async (requestId: number) => {
-    return axios.patch('/streaming/cancel_host_apply/', { request_id: requestId });
+    return axios.patch('/streaming/cancel_host_apply/', { request_id: requestId }, axiosConfig());
 }
