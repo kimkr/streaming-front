@@ -30,18 +30,36 @@ export default function PartyHome() {
                 const items = res?.data?.external_data?.request_list || [];
                 const toShowApplication = items
                     .filter(({ status }: PartyApplicationType) => [
-                        APPLICATION_STATE.IN_REVIEW, APPLICATION_STATE.QUEUED
+                        APPLICATION_STATE.IN_REVIEW, APPLICATION_STATE.QUEUED,
+                        APPLICATION_STATE.APPROVAL
                     ].includes(status))?.[0];
                 if (toShowApplication) {
                     setApplication(toShowApplication);
                     setApplicationStatus(toShowApplication.status);
                 }
                 setLoading(false);
+
             } catch (e) {
                 toast("A problem is occurred. Please try again later")
             }
         }
-        anonymousSignIn().then(loadUserApplyStatus)
+
+        const connectSocket = async (userId?: string) => {
+            socket.auth = { userId };
+            socket.connect();
+            socket.on("getNotification", (data: any) => {
+                const { status } = data;
+                if (status !== undefined) {
+                    setApplicationStatus(parseInt(status));
+                }
+            });
+            return;
+        }
+
+        anonymousSignIn().then((userId) =>
+            Promise.all([loadUserApplyStatus(), connectSocket(userId)]));
+
+        return () => { socket.disconnect() };
     }, []);
 
     useEffect(() => {
@@ -49,14 +67,11 @@ export default function PartyHome() {
         switch (applicationStatus) {
             case APPLICATION_STATE.APPROVAL:
                 message = 'Application complete!';
-                socket.disconnect();
                 break;
             case APPLICATION_STATE.REJECTED:
                 message = 'Application rejected!';
-                socket.disconnect();
                 break;
             case APPLICATION_STATE.CANCELED:
-                socket.disconnect();
                 break;
         }
         if (message) {
@@ -65,13 +80,7 @@ export default function PartyHome() {
     }, [applicationStatus]);
 
     useEffect(() => {
-        const updateApplyStatus = (data: any) => {
-            const { status } = data;
-            if (status !== undefined) {
-                setApplicationStatus(status);
-            }
-        }
-        socket.on("getNotification", updateApplyStatus);
+
     }, []);
 
     const startHostingParty = useCallback(async () => {
@@ -85,8 +94,6 @@ export default function PartyHome() {
             });
             setApplication(res.data.external_data);
             setApplicationStatus(res.data.status);
-            socket.auth = { requestId: res.data.external_data.id };
-            socket.connect();
         } catch (e) {
             toast("A problem is occurred. Please try again later.");
         }
@@ -97,7 +104,6 @@ export default function PartyHome() {
         if (requestId !== undefined) {
             try {
                 const res = await cancelHostApplyApi(requestId);
-                socket.disconnect();
                 setApplication(null);
                 setApplicationStatus(APPLICATION_STATE.NA);
                 toast(res.data.message);
