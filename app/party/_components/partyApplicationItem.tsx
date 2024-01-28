@@ -25,7 +25,7 @@ function renderStatusText(status: number) {
         case APPLICATION_STATE.IN_REVIEW:
             return "In review";
         case APPLICATION_STATE.QUEUED:
-            return "In prcessing";
+            return "In queue";
         case APPLICATION_STATE.APPROVAL:
             return "Approved";
         case APPLICATION_STATE.REJECTED:
